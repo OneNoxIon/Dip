@@ -1,12 +1,32 @@
 {% extends "base.html" %} {% block title %}Profile{% endblock %}
+
 {% block content %}
 <form method="POST">
-    <button  for="logout" type="submit" class="btn">LogOut</button>
-    <button  for="eldel" type="submit" class="btn">remove tasks</button>
-    <p style="margin-top: 20%"> </p>
-    <div class="center-block" style="margin-top:auto;"> 
+    <button for="logout" type="button" onclick="deleteAllCookies()">LogOut</button>
+    <button for="eldel" type="button" onclick="deleteTasks()">remove tasks</button>
+    <p style="margin-top: 10%"> </p>
+    <div class="center-block" style="margin-top:auto;">
+        {% if dirstatus == 'isdir' %}
+        {% block profcontent1 %}
+        <p align="center"><b>Введите ФИО сотрудника:</b>
+            <input type=FIOtextbox" value="ФИО">
+            <input type="submit" value="Найти">
+        </p>
+        <div>
+            {% for ftasks in ftaskslist %}
+             <button id="tasks" type="button" class="btn btn-outline-primary btn-block">Наименование:
+            {{ ftasks.Task_name }}       Дата окончания: {{ ftasks.FinalDate}}       Статус: {{ ftasks.Status }}</button>
+            {% endfor %}
+        </div>
+        {% endblock profcontent1 %}
+        {% else %}
+        {% block profcontent2 %}
         {% for task in taskslist %}
-        <button id="tasks" type="button" class="btn btn-outline-primary btn-block">Наименование: {{ task.Task_name }}       Дата окончания: {{ task.FinalDate}}       Статус: {{ task.Status }}</button>
+        <button id="tasks" type="button" class="btn btn-outline-primary btn-block">Наименование:
+            {{ task.Task_name }}       Дата окончания: {{ task.FinalDate}}       Статус: {{ task.Status }}</button>
         {% endfor %}
+        {% endblock profcontent2 %}
+        {% endif %}
     </div>
-</form>{% endblock %}
+</form>
+{% endblock %}

@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, make_response, redirect
+from flask import Blueprint, render_template, request, make_response, redirect,url_for
+from itsdangerous import json
 from .models import User, Tasks
 from . import db
 import sqlite3
@@ -10,7 +11,7 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/logins', methods=['GET', 'POST'])
 def logins():
-    if request.cookies.get('user'):
+    if request.cookies.get('userlog'):
         return redirect('/profile')
     if request.method == 'POST':
         email = request.form.get('email')
@@ -20,18 +21,26 @@ def logins():
             user = User.query.filter_by(Mailbox=email, Password=password).first()
             if user:
                 print(user.Login + "   loggined")
-                res = make_response("Setting a cookie")
-                res.set_cookie('user', user.Login, max_age=60*60*24)
-                return redirect('/profile')
+
+                res = redirect('/profile')
+                res.set_cookie('userlog', str(user.Id))
+                #return redirect('/profile')
+                return res
 
     return render_template('login.html')
     
 @auth.route('/profile', methods=['GET', 'POST'])
 def profile():
-    #taskslist = Tasks.query.all()[1]
-    taskslist = Tasks.query.all()
-    print(taskslist)
-    return render_template('profile.html',taskslist=taskslist)
+    user_id = request.cookies.get('userlog')
+    taskslist = Tasks.query.filter_by(User_id=int(user_id))
+    usercach = User.query.filter_by(Id=int(user_id)).first()
+    if (usercach.Position == 'Директор'):
+        dirstr='isdir'
+        print(dirstr)
+    else:
+        dirstr='isnotdir'
+        print(dirstr)
+    return render_template('profile.html',taskslist=taskslist, dirstatus=dirstr)
     
     
 @auth.route('/logout')

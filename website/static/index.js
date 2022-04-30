@@ -7,10 +7,22 @@ function deleteAllCookies() {
         document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
     console.log('deleteallcookie')
+    window.location.replace('/logins')
 }
+
 
 function deleteTasks() {
     var element = document.getElementById("tasks");
     element.parentNode.removeChild(element);
-    alert("deletetasks");
-}1
+    var element = document.getElementById("tasks");
+    if (element) {
+        deleteTasks();
+    } else {
+        console.log("deletetasks");
+    }
+}
+
+
+function FindFIO() {
+    fetch('/profile')
+}
