@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request, make_response, redirect
-from .models import User
+from .models import User, Tasks
 from . import db
+import sqlite3
+
+from website import models
 
 auth = Blueprint('auth', __name__)
 
@@ -25,9 +28,13 @@ def logins():
     
 @auth.route('/profile', methods=['GET', 'POST'])
 def profile():
-    return render_template('profile.html')
+    #taskslist = Tasks.query.all()[1]
+    taskslist = Tasks.query.all()
+    print(taskslist)
+    return render_template('profile.html',taskslist=taskslist)
     
     
 @auth.route('/logout')
 def logout():
+    print('123')
     return "<p>Logout</p>"

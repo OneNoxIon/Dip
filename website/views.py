@@ -7,3 +7,7 @@ views = Blueprint('views', __name__)
 def home():
 
     return redirect('/logins')
+
+@views.route('/logoutf', methods=['POST'])
+def logoutf():
+    return redirect('/')
