@@ -1,11 +1,12 @@
 {% extends "base.html" %} {% block title %}Profile{% endblock %}
 {% block content %}
 <form method="POST">
-    <button for="logout" type="submit" class="btn btn-primary" onclick="deleteAllCookies()">logout</button>
+    <button  for="logout" type="submit" class="btn">LogOut</button>
+    <button  for="eldel" type="submit" class="btn">remove tasks</button>
     <p style="margin-top: 20%"> </p>
     <div class="center-block" style="margin-top:auto;"> 
         {% for task in taskslist %}
-        <button type="button" class="btn btn-outline-primary btn-block">Наименование: {{ task.Task_name }}       Дата окончания: {{ task.FinalDate}}       Статус: {{ task.Status }}</button>
+        <button id="tasks" type="button" class="btn btn-outline-primary btn-block">Наименование: {{ task.Task_name }}       Дата окончания: {{ task.FinalDate}}       Статус: {{ task.Status }}</button>
         {% endfor %}
     </div>
 </form>{% endblock %}
