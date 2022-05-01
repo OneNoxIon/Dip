@@ -9,15 +9,20 @@
         {% if dirstatus == 'isdir' %}
         {% block profcontent1 %}
         <p align="center"><b>Введите ФИО сотрудника:</b>
-            <input type=FIOtextbox" value="ФИО">
+            <input type="FIO" 
+                   class="form-control" 
+                   id="FIO" 
+                   name="FIO" 
+                   placeholder="Введите ФИО" />
             <input type="submit" value="Найти">
-        </p>
         <div>
             {% for ftasks in ftaskslist %}
-             <button id="tasks" type="button" class="btn btn-outline-primary btn-block">Наименование:
-            {{ ftasks.Task_name }}       Дата окончания: {{ ftasks.FinalDate}}       Статус: {{ ftasks.Status }}</button>
+            <button id="tasks" type="button" class="btn btn-outline-primary btn-block">Наименование:
+                {{ ftasks.Task_name }}       Дата окончания: {{ ftasks.FinalDate}}       Статус:
+                {{ ftasks.Status }}</button>
             {% endfor %}
         </div>
+        </p>
         {% endblock profcontent1 %}
         {% else %}
         {% block profcontent2 %}

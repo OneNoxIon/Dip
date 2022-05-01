@@ -8,7 +8,6 @@ from website import models
 
 auth = Blueprint('auth', __name__)
 
-
 @auth.route('/logins', methods=['GET', 'POST'])
 def logins():
     if request.cookies.get('userlog'):
@@ -31,16 +30,28 @@ def logins():
     
 @auth.route('/profile', methods=['GET', 'POST'])
 def profile():
-    user_id = request.cookies.get('userlog')
-    taskslist = Tasks.query.filter_by(User_id=int(user_id))
-    usercach = User.query.filter_by(Id=int(user_id)).first()
-    if (usercach.Position == 'Директор'):
-        dirstr='isdir'
-        print(dirstr)
-    else:
-        dirstr='isnotdir'
-        print(dirstr)
-    return render_template('profile.html',taskslist=taskslist, dirstatus=dirstr)
+        user_id = request.cookies.get('userlog')
+        taskslist = Tasks.query.filter_by(User_id=int(user_id))
+        usercach = User.query.filter_by(Id=int(user_id)).first()
+        if (usercach.Position == 'Директор'):
+            dirstr='isdir'
+            print(dirstr)
+            req = request.form.get('FIO')
+            print(req)
+            if(req is not None):
+                FIOList = req.split(' ')
+                if(len(FIOList) == 3):
+                    userfiolist = User.query.filter_by(FirstName=str(FIOList[1]), LastName=str(FIOList[0]), Patronymic=str(FIOList[2])).first()
+                    print(userfiolist)
+                    if(userfiolist is not None):
+                        FIOtasklist = Tasks.query.filter_by(User_id=int(userfiolist.Id))
+                        return render_template('profile.html',ftaskslist=FIOtasklist, dirstatus=dirstr)
+                else:
+                    print('Noooooo')
+        else:
+            dirstr='isnotdir'
+            print(dirstr)
+        return render_template('profile.html',taskslist=taskslist, dirstatus=dirstr)
     
     
 @auth.route('/logout')
