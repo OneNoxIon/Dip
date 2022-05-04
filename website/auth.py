@@ -15,21 +15,18 @@ def logins():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-
         if email:
             user = User.query.filter_by(Mailbox=email, Password=password).first()
             if user:
                 print(user.Login + "   loggined")
-
                 res = redirect('/profile')
                 res.set_cookie('userlog', str(user.Id))
-                #return redirect('/profile')
                 return res
-
     return render_template('login.html')
     
 @auth.route('/profile', methods=['GET', 'POST'])
 def profile():
+        selectedTask = False
         user_id = request.cookies.get('userlog')
         taskslist = Tasks.query.filter_by(User_id=int(user_id))
         usercach = User.query.filter_by(Id=int(user_id)).first()
@@ -37,8 +34,8 @@ def profile():
             dirstr='isdir'
             print(dirstr)
             req = request.form.get('FIO')
-            print(req)
             if(req is not None):
+                print(req)
                 FIOList = req.split(' ')
                 if(len(FIOList) == 3):
                     userfiolist = User.query.filter_by(FirstName=str(FIOList[1]), LastName=str(FIOList[0]), Patronymic=str(FIOList[2])).first()
@@ -48,6 +45,51 @@ def profile():
                         return render_template('profile.html',ftaskslist=FIOtasklist, dirstatus=dirstr)
                 else:
                     print('Noooooo')
+            req = request.form.get('tasks')
+            if(req is not None):    
+                print(int(req))
+                TaskID = Tasks.query.filter_by(Id=int(req)).first()
+                taskinf= Tasks.query.filter_by(Id=int(req))
+                Userinf = User.query.filter_by(Id=int(TaskID.User_id))
+                StartDate = str(taskinf.first().StartDate).replace(' ','T')
+                FinalDate = str(taskinf.first().StartDate).replace(' ','T')
+                return render_template('profile.html', dirstatus=dirstr, Userinfo=Userinf, taskinfo=taskinf, StartDate=StartDate, FinalDate=FinalDate)
+            req = request.form.get('EditTask')
+            if(req is not None):
+                EditFio = str(request.form.get('EditFio'))
+                EditStartDate = str(request.form.get('EditStartDate'))
+                EditFinalDate = str(request.form.get('EditFinalDate'))
+                EditNameTask = str(request.form.get('EditNameTask'))
+                EditTaskInfo = str(request.form.get('EditTaskInfo'))
+                EditStatus = str(request.form.get('EditStatus'))
+                if(EditFio is not None 
+                and EditStartDate is not None 
+                and EditFinalDate is not None 
+                and EditNameTask is not None 
+                and EditTaskInfo is not None 
+                and EditStatus is not None):
+
+                    # EditFio= EditFio.split(': ')
+                    # EditStartDate = EditStartDate.split(': ')
+                    # EditFinalDate = EditFinalDate.split(': ')
+                    # EditNameTask = EditNameTask.split(': ')
+                    # EditTaskInfo = EditTaskInfo.split(': ')
+                    # EditStatus = EditStatus.split(': ')
+
+                    # if(len(EditFio) == 2
+                    # and len(EditNameTask) == 2
+                    # and len(EditTaskInfo) == 2):
+                    #     if(User.query.filter_by(LastName=str(EditFio[1]).split(' ')[0]).first()):
+                            print(EditFio)
+                            print(EditStartDate)
+                            print(EditFinalDate)
+                            print(EditNameTask)
+                            print(EditTaskInfo)
+                            print(EditStatus)
+                
+
+
+
         else:
             dirstr='isnotdir'
             print(dirstr)

@@ -5,23 +5,41 @@
     <button for="logout" type="button" onclick="deleteAllCookies()">LogOut</button>
     <button for="eldel" type="button" onclick="deleteTasks()">remove tasks</button>
     <p style="margin-top: 10%"> </p>
+    </div>
     <div class="center-block" style="margin-top:auto;">
         {% if dirstatus == 'isdir' %}
         {% block profcontent1 %}
         <p align="center"><b>Введите ФИО сотрудника:</b>
-            <input type="FIO" 
-                   class="form-control" 
-                   id="FIO" 
-                   name="FIO" 
-                   placeholder="Введите ФИО" />
+            <input type="FIO" class="form-control" id="FIO" name="FIO" placeholder="Введите ФИО" />
             <input type="submit" value="Найти">
-        <div>
-            {% for ftasks in ftaskslist %}
-            <button id="tasks" type="button" class="btn btn-outline-primary btn-block">Наименование:
-                {{ ftasks.Task_name }}       Дата окончания: {{ ftasks.FinalDate}}       Статус:
-                {{ ftasks.Status }}</button>
+            <div>
+                {% for ftasks in ftaskslist %}
+                <button id="tasks" name="tasks" type="submit" class="btn btn-outline-primary btn-block"
+                    onclick="FindFIO" align:center value={{ ftasks.Id }}>
+                    <option value={{ftasks.id}}></option>
+                    Наименование:
+                    {{ ftasks.Task_name }}       Дата окончания: {{ ftasks.FinalDate}}       Статус:
+                    {{ ftasks.Status }}
+                </button>
+                {% endfor %}
+            </div>
+            <div class="right-block" style="float: right; width:30%; background-color: lightgrey;">
+                {% for taskinformation in taskinfo %}
+                {% for userinformation in Userinfo %}
+                <p>ФИО сотрудника: <input id="EditFio"name="EditFio" value="{{ userinformation.LastName }} {{ userinformation.FirstName }} {{ userinformation.Patronymic }}" style="min-width: fit-content; width: 100%;"/>
+                <p>Дата начала: <input type="datetime-local" id="EditStartDate" value="{{ StartDate }}"name="EditStartDate"/></p>
+                <p>Дата окончания: <input type="datetime-local" id="EditFinalDate" value="{{ FinalDate }}" name="EditFinalDate"/></p>
+                <p>Название: <input id="EditNameTask" name="EditNameTask" value="{{ taskinformation.Task_name }}"  style="min-width: fit-content; width: 100%;" /></p>
+                <p>Задача: <input id="EditTaskInfo" name="EditTaskInfo" value="{{taskinformation.Task }}"  style="min-width: fit-content; width: 100%;" /></p>
+                <p>Статус: <select id="EditStatus" name="EditStatus">
+                    <option>В разработке</option>
+                    <option>Готово</option>
+                    <option>Провалено</option>
+                </select></p>
+                <input id="EditTask" name="EditTask" type="submit" value="Редактировть задачу"/>
+            </div>
             {% endfor %}
-        </div>
+            {% endfor %}
         </p>
         {% endblock profcontent1 %}
         {% else %}
