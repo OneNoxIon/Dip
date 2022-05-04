@@ -3,53 +3,101 @@
 {% block content %}
 <form method="POST">
     <button for="logout" type="button" onclick="deleteAllCookies()">LogOut</button>
-    <button for="eldel" type="button" onclick="deleteTasks()">remove tasks</button>
     <p style="margin-top: 10%"> </p>
     </div>
-    <div class="center-block" style="margin-top:auto;">
         {% if dirstatus == 'isdir' %}
-        {% block profcontent1 %}
-        <p align="center"><b>Введите ФИО сотрудника:</b>
-            <input type="FIO" class="form-control" id="FIO" name="FIO" placeholder="Введите ФИО" />
-            <input type="submit" value="Найти">
-            <div>
-                {% for ftasks in ftaskslist %}
-                <button id="tasks" name="tasks" type="submit" class="btn btn-outline-primary btn-block"
-                    onclick="FindFIO" align:center value={{ ftasks.Id }}>
-                    <option value={{ftasks.id}}></option>
-                    Наименование:
-                    {{ ftasks.Task_name }}       Дата окончания: {{ ftasks.FinalDate}}       Статус:
-                    {{ ftasks.Status }}
-                </button>
-                {% endfor %}
-            </div>
-            <div class="right-block" style="float: right; width:30%; background-color: lightgrey;">
-                {% for taskinformation in taskinfo %}
-                {% for userinformation in Userinfo %}
-                <input id="TaskSelected" name="TaskSelected" value="{{ taskinformation.Id }}" style="visibility: hidden;"/>
-                <p>ФИО сотрудника: <input id="EditFio"name="EditFio" value="{{ userinformation.LastName }} {{ userinformation.FirstName }} {{ userinformation.Patronymic }}" style="min-width: fit-content; width: 100%;"/>
-                <p>Дата начала: <input type="datetime-local" id="EditStartDate" value="{{ StartDate }}"name="EditStartDate"/></p>
-                <p>Дата окончания: <input type="datetime-local" id="EditFinalDate" value="{{ FinalDate }}" name="EditFinalDate"/></p>
-                <p>Название: <input id="EditNameTask" name="EditNameTask" value="{{ taskinformation.Task_name }}"  style="min-width: fit-content; width: 100%;" /></p>
-                <p>Задача: <input id="EditTaskInfo" name="EditTaskInfo" value="{{taskinformation.Task }}"  style="min-width: fit-content; width: 100%;" /></p>
-                <p>Статус: <select id="EditStatus" name="EditStatus">
-                    <option>В разработке</option>
-                    <option>Готово</option>
-                    <option>Провалено</option>
-                </select></p>
-                <input id="EditTask" name="EditTask" type="submit" value="Редактировть задачу"/>
-            </div>
-            {% endfor %}
-            {% endfor %}
-        </p>
-        {% endblock profcontent1 %}
+        
+            {% block content1 %}
+                {% if NewTask == 'NewTask' %}
+                    {% block content6 %}
+                        <button for="eldel" type="submit" name="NewTask" id="NewTask" value="NewTaskForDB">Back</button>
+                        <div class="center-block" style="margin-top:auto;" align="center">
+                            <p>ФИО сотрудника: <input id="AddTaskFio" name="AddTaskFio"></input></p>
+                            <p>Название: <input id="AddTaskName" name="AddTaskName"></input></p>
+                            <p>Задача: <input id="AddTask" name="AddTask" style="height:500%"></input></p>
+                            <p>Дата начала: <input type="datetime-local" id="AddTaskStartDate" name="AddTaskStartDate"></input></p>
+                            <p>Дата окончания: <input type="datetime-local" id="AddTaskFinalDate" name="AddTaskFinalDate"></p>
+                            <input type="submit" id="AddTaskButt" name="AddTaskButt" value="AddTaskButt"></input>
+                            </div>
+                    {% endblock content6 %}
+
+                {% endif %}
+                {% if NewTask != 'NewTask' %}
+                
+                    {% block content8 %}
+                        {% if AddUser == 'NewUsers' %}
+
+                            {% block content7 %}
+                                <button for="eldel" type="submit" name="NewUser" id="NewUser" value="UserForDB">Back</button> 
+                                <div class="center-block" style="margin-top:auto;" align="center">
+                                <p>ФИО сотрудника: <input id="AddUserFio" name="AddUserFio"></input></p>
+                                <p>Логин: <input id="AddUserLogin" name="AddUserLogin"></input></p>
+                                <p>Пароль: <input id="AddUserPassword" name="AddUserPassword"></input></p>
+                                <p>Должность: <input id="AddUserPosition" name="AddUserPosition"></input></p>
+                                <p>Почта: <input type="email" class="form-control" id="AddUserMailbox" name="AddUserMailbox"></p>
+                                <input type="submit" id="AddUserButt" name="AddUserButt" value="AddUserButt"></input>
+                                </div>
+                            {% endblock content7 %}
+
+                        {% endif %}
+                        {% if AddUser != 'NewUsers' %}
+                            <button type="submit" name="NewTask" id="NewTask" value="NewTask">New Task</button>
+                            <button for="eldel" type="submit" name="NewUser" id="NewUser" value="NewUser">Add user</button>
+                            {% block content9 %}
+                                <div class="center-block" style="margin-top:auto;">
+                                    <p align="center"><b>Введите ФИО сотрудника:</b>
+                                    <input type="FIO" class="form-control" id="FIO" name="FIO" placeholder="Введите ФИО" />
+                                    <input type="submit" value="Найти">
+                                    <div>
+                                        {% for ftasks in ftaskslist %}
+                                        <button id="tasks" name="tasks" type="submit" class="btn btn-outline-primary btn-block"
+                                            onclick="FindFIO" align:center value={{ ftasks.Id }}>
+                                            <option value={{ftasks.id}}></option>
+                                            Наименование:
+                                            {{ ftasks.Task_name }}       Дата окончания: {{ ftasks.FinalDate}}       Статус:
+                                            {{ ftasks.Status }}
+                                        </button>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="right-block" style="float: right; width:30%; background-color: lightgrey;">
+                                        {% for taskinformation in taskinfo %}
+                                            {% for userinformation in Userinfo %}
+                                                <input id="TaskSelected" name="TaskSelected" value="{{ taskinformation.Id }}"
+                                                    style="visibility: hidden;" />
+                                                <p>ФИО сотрудника: <input id="EditFio" name="EditFio"
+                                                        value="{{ userinformation.LastName }} {{ userinformation.FirstName }} {{ userinformation.Patronymic }}"
+                                                        style="min-width: fit-content; width: 100%;" />
+                                                    <p>Дата начала: <input type="datetime-local" id="EditStartDate" value="{{ StartDate }}"
+                                                            name="EditStartDate" /></p>
+                                                    <p>Дата окончания: <input type="datetime-local" id="EditFinalDate" value="{{ FinalDate }}"
+                                                            name="EditFinalDate" /></p>
+                                                    <p>Название: <input id="EditNameTask" name="EditNameTask" value="{{ taskinformation.Task_name }}"
+                                                            style="min-width: fit-content; width: 100%;" /></p>
+                                                    <p>Задача: <input id="EditTaskInfo" name="EditTaskInfo" value="{{taskinformation.Task }}"
+                                                            style="min-width: fit-content; width: 100%;" /></p>
+                                                    <p>Статус: <select id="EditStatus" name="EditStatus">
+                                                            <option>В разработке</option>
+                                                            <option>Готово</option>
+                                                            <option>Провалено</option>
+                                                        </select></p>
+                                                    <input id="EditTask" name="EditTask" type="submit" value="Редактировть задачу" />
+                                                    <input id="SendReport" name="SendReport" type="submit" value="Отправить отчёт" />
+                                                </div>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </p>
+                            {% endblock content9 %}
+
+                        {% endif %}
+                    {% endblock content8 %}
+
+                {% endif %}
+        {% endblock content1 %}
         {% else %}
-        {% block profcontent2 %}
-        {% for task in taskslist %}
-        <button id="tasks" type="button" class="btn btn-outline-primary btn-block">Наименование:
-            {{ task.Task_name }}       Дата окончания: {{ task.FinalDate}}       Статус: {{ task.Status }}</button>
-        {% endfor %}
-        {% endblock profcontent2 %}
+                {% for task in taskslist %}
+                    <button id="tasks" type="button" class="btn btn-outline-primary btn-block">Наименование:
+                        {{ task.Task_name }}       Дата окончания: {{ task.FinalDate}}       Статус: {{ task.Status }}</button>
+                {% endfor %}
         {% endif %}
     </div>
 </form>
