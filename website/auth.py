@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, make_response, redirect,u
 from itsdangerous import json
 from .models import User, Tasks
 from . import db
-import sqlite3
+import sqlite3, os.path
 
 from website import models
 
@@ -62,31 +62,40 @@ def profile():
                 EditNameTask = str(request.form.get('EditNameTask'))
                 EditTaskInfo = str(request.form.get('EditTaskInfo'))
                 EditStatus = str(request.form.get('EditStatus'))
+                TaskSelected = str(request.form.get('TaskSelected'))
                 if(EditFio is not None 
                 and EditStartDate is not None 
                 and EditFinalDate is not None 
                 and EditNameTask is not None 
                 and EditTaskInfo is not None 
                 and EditStatus is not None):
+                    if(len(EditFio.split(' '))==3
+                    and User.query.filter_by(LastName=(EditFio.split(' '))[0]).first()
+                    and User.query.filter_by(FirstName=(EditFio.split(' '))[1]).first()
+                    and User.query.filter_by(Patronymic=(EditFio.split(' '))[2]).first()):
 
-                    # EditFio= EditFio.split(': ')
-                    # EditStartDate = EditStartDate.split(': ')
-                    # EditFinalDate = EditFinalDate.split(': ')
-                    # EditNameTask = EditNameTask.split(': ')
-                    # EditTaskInfo = EditTaskInfo.split(': ')
-                    # EditStatus = EditStatus.split(': ')
+                        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+                        db_path = os.path.join(BASE_DIR, "database.db")
+                        with sqlite3.connect(db_path) as db:
 
-                    # if(len(EditFio) == 2
-                    # and len(EditNameTask) == 2
-                    # and len(EditTaskInfo) == 2):
-                    #     if(User.query.filter_by(LastName=str(EditFio[1]).split(' ')[0]).first()):
-                            print(EditFio)
-                            print(EditStartDate)
-                            print(EditFinalDate)
-                            print(EditNameTask)
-                            print(EditTaskInfo)
-                            print(EditStatus)
-                
+                            TaskCommit = Tasks.query.filter_by(Id=int(TaskSelected)).first()
+                            print(TaskCommit)
+                            print(TaskCommit.User_id)
+                            TaskCommit.User_id = User.query.filter_by(LastName=(EditFio.split(' '))[0],FirstName=(EditFio.split(' '))[1],Patronymic=(EditFio.split(' '))[2]).first().Id
+                            print(TaskCommit.User_id)
+                            TaskCommit.Task_name = EditNameTask
+                            TaskCommit.Task = EditTaskInfo
+                            TaskCommit.Status = EditStatus
+                            TaskCommit.FinalDate=EditFinalDate.replace('T', ' ')
+                            TaskCommit.StartDate=EditStartDate.replace('T', ' ')
+                            cursor = db.cursor()
+                            print('Connected to database')
+                            sql_update_query = """Update Tasks set User_id =""" + str(TaskCommit.User_id) + """ where id = 4"""
+                            cursor.execute(sql_update_query)
+                            db.commit()
+                            cursor.close()
+
+
 
 
 
